@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { toast } from "react-toastify";
 axios.interceptors.response.use(null, (error) => {
   if (
     error.response &&
@@ -8,7 +8,7 @@ axios.interceptors.response.use(null, (error) => {
   ) {
     return Promise.reject(error);
   } else {
-    alert("Unexpected error");
+    toast.error("Unexpected error");
     return Promise.reject(error);
   }
 });
