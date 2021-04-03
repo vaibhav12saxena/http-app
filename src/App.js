@@ -1,19 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
+import http from "./services/httpService";
 import "./App.css";
-
-axios.interceptors.response.use(null, (error) => {
-  if (
-    error.response &&
-    error.response.staus >= 400 &&
-    error.response.staus <= 500
-  ) {
-    return Promise.reject(error);
-  } else {
-    alert("Unexpected error");
-    return Promise.reject(error);
-  }
-});
 
 const urlEmbedded = "https://jsonplaceholder.typicode.com/posts";
 
@@ -24,7 +11,7 @@ class App extends Component {
 
   async componentDidMount() {
     /*******  OLDER WAY OF WRITING PROMISES
-    * const promise = axios.get("https://jsonplaceholder.typicode.com/posts");
+    * const promise = http.get("https://jsonplaceholder.typicode.com/posts");
     //Promise is an object that holds the result of an asynchronous operation. Promises to hold the result of the http call here
     promise
       .then((value) => {
@@ -35,7 +22,7 @@ class App extends Component {
       });
     console.log(promise);
     */
-    const { data } = await axios.get(
+    const { data } = await http.get(
       // object destructuring
       urlEmbedded
     );
@@ -44,7 +31,7 @@ class App extends Component {
   }
   handleAdd = async () => {
     const obj = { title: "a", body: "b" };
-    const { data } = await axios.post(urlEmbedded, obj);
+    const { data } = await http.post(urlEmbedded, obj);
 
     const posts = [data, ...this.state.posts];
     this.setState({ posts });
@@ -52,7 +39,7 @@ class App extends Component {
 
   handleUpdate = async (post) => {
     post.title = "updated";
-    await axios.put(`${urlEmbedded}/${post.id}`, post); // patch we send only the property to be chnaged
+    await http.put(`${urlEmbedded}/${post.id}`, post); // patch we send only the property to be chnaged
     const posts = [...this.state.posts];
     const index = posts.indexOf(post);
     posts[index] = { ...post };
@@ -64,8 +51,7 @@ class App extends Component {
     const posts = this.state.posts.filter((e) => e.id !== post.id); // always forget the return or {} does not return
     this.setState({ posts });
     try {
-      await axios.delete(`${urlEmbedded}/${post.id}`);
-      throw new Error("");
+      await http.delete(`${urlEmbedded}/131131312312312331232131`);
     } catch (ex) {
       if (ex.response && ex.response.staus) {
         alert("post already deleted", ex);
