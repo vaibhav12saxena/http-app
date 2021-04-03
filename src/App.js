@@ -51,7 +51,7 @@ class App extends Component {
     const posts = this.state.posts.filter((e) => e.id !== post.id); // always forget the return or {} does not return
     this.setState({ posts });
     try {
-      await http.delete(`${urlEmbedded}/131131312312312331232131`);
+      await http.delete(`${urlEmbedded}/${post.id}`);
     } catch (ex) {
       if (ex.response && ex.response.staus) {
         alert("post already deleted", ex);
