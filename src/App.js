@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import http from "./services/httpService";
+import config from "./config.json";
 import "./App.css";
-
-const urlEmbedded = "https://jsonplaceholder.typicode.com/posts";
 
 class App extends Component {
   state = {
@@ -24,14 +23,14 @@ class App extends Component {
     */
     const { data } = await http.get(
       // object destructuring
-      urlEmbedded
+      config.apiEndPoint
     );
     console.log(data);
     this.setState({ posts: data });
   }
   handleAdd = async () => {
     const obj = { title: "a", body: "b" };
-    const { data } = await http.post(urlEmbedded, obj);
+    const { data } = await http.post(config.apiEndPoint, obj);
 
     const posts = [data, ...this.state.posts];
     this.setState({ posts });
@@ -39,7 +38,7 @@ class App extends Component {
 
   handleUpdate = async (post) => {
     post.title = "updated";
-    await http.put(`${urlEmbedded}/${post.id}`, post); // patch we send only the property to be chnaged
+    await http.put(`${config.apiEndPoint}/${post.id}`, post); // patch we send only the property to be chnaged
     const posts = [...this.state.posts];
     const index = posts.indexOf(post);
     posts[index] = { ...post };
@@ -51,7 +50,7 @@ class App extends Component {
     const posts = this.state.posts.filter((e) => e.id !== post.id); // always forget the return or {} does not return
     this.setState({ posts });
     try {
-      await http.delete(`${urlEmbedded}/${post.id}`);
+      await http.delete(`${config.apiEndPoint}/${post.id}`);
     } catch (ex) {
       if (ex.response && ex.response.staus) {
         alert("post already deleted", ex);
