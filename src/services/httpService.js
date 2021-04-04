@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import * as Sentry from "@sentry/react";
+import logger from "./logService";
 axios.interceptors.response.use(null, (error) => {
   if (
     error.response &&
@@ -9,7 +9,7 @@ axios.interceptors.response.use(null, (error) => {
   ) {
     return Promise.reject(error);
   } else {
-    Sentry.captureException(error);
+    logger.log(error);
     toast.error("Unexpected error");
     return Promise.reject(error);
   }
